@@ -1,0 +1,51 @@
+{
+  "name": "homepage",
+  "version": "0.0.1",
+  "description": "A reverse proxy and home page combined, offering easy access to all services.",
+  "main": "index.js",
+  "scripts": {
+    "production": "node proxy.js",
+    "clean": "rimraf ./public ./.cache ./dist",
+    "start": "concurrently \"nodemon proxy.js\" \"parcel index.html\"",
+    "website": "parcel index.html",
+    "build": "parcel build index.html --out-dir ./public",
+    "dev": "parcel index.html --out-dir ./public",
+    "build:domain": "npm run clean && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DRIVER-EU/homepage.git"
+  },
+  "keywords": [
+    "reverse",
+    "proxy",
+    "redbird"
+  ],
+  "author": "Erik Vullings <erik.vullings@gmail.com> (http://www.tno.nl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DRIVER-EU/homepage/issues"
+  },
+  "homepage": "https://github.com/DRIVER-EU/homepage#readme",
+  "dependencies": {
+    "@koa/cors": "^3.0.0",
+    "koa": "^2.8.1",
+    "koa-static": "^5.0.0",
+    "material-icons": "^0.3.1",
+    "materialize-css": "^1.0.0",
+    "mithril": "^2.0.4",
+    "redbird": "^0.9.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.49",
+    "@types/materialize-css": "^1.0.6",
+    "@types/mithril": "^2.0.0",
+    "autoprefixer": "^9.6.1",
+    "concurrently": "^4.1.2",
+    "cssnano": "^4.1.10",
+    "nodemon": "^1.19.2",
+    "parcel-bundler": "^1.12.3",
+    "rimraf": "^3.0.0",
+    "typescript": "^3.6.3"
+  }
+}
