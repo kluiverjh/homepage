@@ -13,14 +13,63 @@ npm i
 
 ## Production
 
+For the home page to work, it needs to know the location of the Test-bed services. So you need to specify them via the environment by setting:
+
 ```bash
+set tmt='localhost:3210'
+set rest='localhost:8082'
+set topics='localhost:3600'
+set schemas='localhost:3601'
+set admin='localhost:8090'
+set aar='localhost:8095'
+set ost='localhost:8050'
+set time='localhost:8100'
+set lfs='localhost:9090'
+
 npm run production
 ```
 
 ## Development
 
 ```bash
+set tmt='localhost:3210'
+set rest='localhost:8082'
+set topics='localhost:3600'
+set schemas='localhost:3601'
+set admin='localhost:8090'
+set aar='localhost:8095'
+set ost='localhost:8050'
+set time='localhost:8100'
+set lfs='localhost:9090'
+
 npm start
+```
+
+## Docker
+
+In order to build a new image, run `npm run docker:local`. You can test it using `npm run docker:run` (use another terminal to stop your container) or `npm run docker:sh` to enter it. When you are happy with it, run `npm run docker` to publish it to the Docker hub.
+
+Since the reverse proxy needs to access the services, you need to specify their location. Typically, running outside a  Docker container, you would refer to `localhost:port`. However, inside a Docker container, you refer to a service by its container name, i.e. `container:port`. For example, consider the following.
+
+```yaml
+  homepage:
+    image: drivereu/homepage
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      title: Test-bed FD
+      email: your.email@gmail.com
+      # ssl: true  # When running in production, and you want to use letsencrypt to get the certificates.
+      admin: admintool:8090
+      tmt: trial_management_tool:3210
+      aar: afteractionreview:8095
+      lfs: large_file_service:9090
+      time: time_service:8100
+      schemas: kafka_schema_registry_ui:8000
+      topics: kafka_topics_ui:8000
+    volumes:
+      - certs:/usr/src/app/certs # For saving the letsencrypt certificates
 ```
 
 ### Proxy configuration
