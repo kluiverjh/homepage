@@ -3,32 +3,35 @@ const Koa = require('koa');
 const cors = require('@koa/cors');
 const serve = require('koa-static');
 
+const hostname = process.env.hostname || 'localhost';
+const port = process.env.port || '3050';
+
+// In a docker env, use container_name:port. Running locally, use localhost:port
+const tmt = process.env.tmt; // || 'localhost:3210';
+const rest = process.env.rest; // || 'localhost:8082';
+const topics = process.env.topics; // || 'localhost:3600';
+const schemas = process.env.schemas; // || 'localhost:3601';
+const admin = process.env.admin; // || 'localhost:8090';
+const aar = process.env.aar; // || 'localhost:8095';
+const ost = process.env.ost; // || 'localhost:8050';
+const time = process.env.time; // || 'localhost:8100';
+const lfs = process.env.lfs; // || 'localhost:9090';
+const useSsl = process.env.ssl || false;
+
 // Title on the home page
-const title = 'Test-bed';
+const title = process.env.title || 'Test-bed';
 // Let's encrypt certificates
 const email = process.env.email || 'erik.vullings@tno.nl';
-const ssl = {
-  ssl: {
-    letsencrypt: {
-      email, // Domain owner/admin email
-      production: false, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
-    },
-  },
-};
-
-const homepage = process.env.homepage || 3050;
-const hostname = process.env.hostname || 'localhost';
-const ip = process.env.ip || '127.0.0.1';
-
-const tmt = process.env.tmt || 3210;
-const rest = process.env.rest || 8082;
-const topics = process.env.topics || 3600;
-const schemas = process.env.schemas || 3601;
-const admin = process.env.admin || 8090;
-const aar = process.env.aar || 8095;
-const ost = process.env.ost || 8050;
-const time = process.env.time || 8100;
-const lfs = process.env.lfs || 9090;
+const ssl = useSsl
+  ? {
+      ssl: {
+        letsencrypt: {
+          email, // Domain owner/admin email
+          production: true, // WARNING: Only use this flag when the proxy is verified to work correctly to avoid being banned!
+        },
+      },
+    }
+  : undefined;
 
 const resolvers = [];
 
@@ -58,13 +61,13 @@ app.use(async function(ctx, next) {
     },
   };
 });
-app.listen(homepage, () => `Homepage is listening on ${homepage}.`);
+app.listen(port, () => console.log(`Homepage is listening on ${port}.`));
 
 if (schemas) {
   const resolver = function(host, url, req) {
     if (/^\/schemas\//.test(url) || /\/api\/schema-registry/.test(url)) {
       req.url = url.replace(/^\/schemas/, '');
-      return { url: `${ip}:${schemas}/` };
+      return { url: `${schemas}/` };
     }
   };
   resolver.priority = 100;
@@ -75,7 +78,7 @@ if (topics) {
   const resolver = function(host, url, req) {
     if (/^\/topics\//.test(url) || /\/api\/kafka-rest-proxy/.test(url)) {
       req.url = url.replace(/^\/topics/, '');
-      return { url: `${ip}:${topics}/` };
+      return { url: `${topics}/` };
     }
   };
   resolver.priority = 100;
@@ -86,7 +89,7 @@ if (admin) {
   const resolver = function(host, url, req) {
     if (/^\/admin\//.test(url) || /^\/AdminServiceWSEndpoint/.test(url) || /^\/AdminService/.test(url)) {
       req.url = url.replace(/^\/admin/, '');
-      return { url: `${ip}:${admin}/` };
+      return { url: `${admin}/` };
     }
   };
   resolver.priority = 100;
@@ -103,45 +106,50 @@ if (aar) {
       /^\/static\/css/.test(url)
     ) {
       req.url = url.replace(/^\/aar/, '');
-      return { url: `${ip}:${aar}/` };
+      return { url: `${aar}/` };
     }
   };
   resolver.priority = 100;
   resolvers.push(resolver);
 }
 
-const proxy = require('redbird')({
-  port: 80,
-  letsencrypt: {
-    path: 'certs',
-    port: 3000,
-  },
-  ssl: {
-    port: 443,
-  },
-  resolvers,
-});
+const proxy = require('redbird')(
+  useSsl
+    ? {
+        port: 80,
+        letsencrypt: {
+          path: 'certs',
+          port: 3000,
+        },
+        ssl: {
+          port: 443,
+        },
+        resolvers,
+      }
+    : { port: 80, resolvers }
+);
 
 if (tmt) {
-  proxy.register(`${hostname}/tmt`, `${ip}:${tmt}`, ssl);
+  proxy.register(`${hostname}/tmt`, `${tmt}`, ssl);
+  proxy.register(`${hostname}/socket.io`, `${tmt}/socket.io`, ssl);
 }
 
 if (rest) {
-  proxy.register(`${hostname}/rest`, `${ip}:${rest}`, ssl);
+  proxy.register(`${hostname}/rest`, `${rest}`, ssl);
 }
 
 if (time) {
-  proxy.register(`${hostname}/time`, `${ip}:${time}/time-service/`, ssl);
-  proxy.register(`${hostname}/time-service`, `${ip}:${time}/time-service/`, ssl);
+  proxy.register(`${hostname}/time`, `${time}/time-service/`, ssl);
+  proxy.register(`${hostname}/time-service`, `${time}/time-service/`, ssl);
 }
 
 if (lfs) {
-  proxy.register(`${hostname}/lfs`, `${ip}:${lfs}`, ssl);
+  proxy.register(`${hostname}/lfs`, `${lfs}`, ssl);
 }
 
 if (ost) {
-  proxy.register(`${hostname}/ost`, `${ip}:${ost}`, ssl);
+  proxy.register(`${hostname}/ost`, `${ost}`, ssl);
 }
 
 // For the homepage
-proxy.register(hostname, `${ip}:${homepage}`, ssl);
+proxy.register(hostname, `localhost:${port}`, ssl);
