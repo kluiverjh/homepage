@@ -2,6 +2,8 @@
 
 A reverse proxy and home page combined, offering easy access to all services.
 
+![Screenshot](./img/screenshot.png)
+
 ## Installation
 
 Just run:

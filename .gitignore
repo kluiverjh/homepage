@@ -63,3 +63,4 @@ typings/
 # repo specific
 public
 certs
+dist

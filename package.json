@@ -6,7 +6,7 @@
   "scripts": {
     "production": "node proxy.js",
     "clean": "rimraf ./public ./.cache ./dist",
-    "start": "concurrently \"nodemon proxy.js\" \"parcel index.html\"",
+    "start": "concurrently \"nodemon proxy.js\" \"npm run dev\"",
     "website": "parcel index.html",
     "build": "parcel build index.html --out-dir ./public",
     "dev": "parcel index.html --out-dir ./public",
