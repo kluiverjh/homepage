@@ -78,7 +78,7 @@ export const HomePage = () => ({
           ]),
           m(
             'footer.page-footer.yellow.darken-3',
-            { style: 'height: 100px; padding: 5px 0; position: absolute; bottom: 0; width: 100%' },
+            { style: 'height: 100px; padding: 5px 0; position: fixed; left: 0; bottom: 0; width: 100%' },
             m(
               '.container',
               m('.clearfix', [
