@@ -4,7 +4,7 @@ import driverLogo from './assets/driver-logo-compact2.png';
 import euLogo from './assets/eu-flag-logo.png';
 import logo from './assets/ti.png';
 
-const toList = (obj: { [key: string]: number }) =>
+const toList = (obj: { [key: string]: string }) =>
   m(
     'ul',
     Object.keys(obj)
@@ -14,9 +14,9 @@ const toList = (obj: { [key: string]: number }) =>
 
 let state = {} as {
   title: string;
-  services: { [key: string]: number };
-  debugServices: { [key: string]: number };
-  otherServices: { [key: string]: number };
+  services: { [key: string]: string };
+  debugServices: { [key: string]: string };
+  otherServices: { [key: string]: string };
 };
 
 export const HomePage = () => ({
