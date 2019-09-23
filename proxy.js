@@ -130,26 +130,28 @@ const proxy = require('redbird')(
 );
 
 if (tmt) {
-  proxy.register(`${hostname}/tmt`, `${tmt}`, ssl);
-  proxy.register(`${hostname}/socket.io`, `${tmt}/socket.io`, ssl);
+  proxy.register(`${hostname}/tmt`, `${tmt}`);
+  proxy.register(`${hostname}/socket.io`, `${tmt}/socket.io`);
 }
 
 if (rest) {
-  proxy.register(`${hostname}/rest`, `${rest}`, ssl);
+  proxy.register(`${hostname}/rest`, `${rest}`);
 }
 
 if (time) {
-  proxy.register(`${hostname}/time`, `${time}/time-service/`, ssl);
-  proxy.register(`${hostname}/time-service`, `${time}/time-service/`, ssl);
+  proxy.register(`${hostname}/time`, `${time}/time-service/`);
+  proxy.register(`${hostname}/time-service`, `${time}/time-service/`);
 }
 
 if (lfs) {
-  proxy.register(`${hostname}/lfs`, `${lfs}`, ssl);
+  proxy.register(`${hostname}/lfs`, `${lfs}`);
 }
 
 if (ost) {
-  proxy.register(`${hostname}/ost`, `${ost}`, ssl);
+  proxy.register(`${hostname}/ost`, `${ost}`);
 }
 
 // For the homepage
-proxy.register(hostname, `localhost:${port}`, ssl);
+proxy.register(hostname, `localhost:${port}`);
+
+redbird.register(hostname, `localhost:${port}`, ssl);
