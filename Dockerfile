@@ -1,11 +1,5 @@
-# Creates the Trial Management Tool.
-#
-# You can access the container using:
-#   docker run -it trial-management-tool sh
-# To start it stand-alone:
-#   docker run -it -p 8888:3210 trial-management-tool
-
 FROM node:alpine AS builder
+# Build 'homepage website'in '/usr/src/app/public'
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 RUN apk --no-cache add python make g++
