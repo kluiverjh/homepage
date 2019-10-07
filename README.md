@@ -27,6 +27,14 @@ set aar='localhost:8095'
 set ost='localhost:8050'
 set time='localhost:8100'
 set lfs='localhost:9090'
+set copper='localhost:8088'
+set copper_api='localhost:3008'
+set replayservice='localhost:8080'
+set replayservice_api='localhost:8209'
+set copper='localhost:8088'
+set copper_api='localhost:3008'
+set replayservice='localhost:8080'
+set replayservice_api='localhost:8209'
 
 npm run production
 ```
@@ -43,6 +51,10 @@ set aar='localhost:8095'
 set ost='localhost:8050'
 set time='localhost:8100'
 set lfs='localhost:9090'
+set copper='localhost:8088'
+set copper_api='localhost:3008'
+set replayservice='localhost:8080'
+set replayservice_api='localhost:8209'
 
 npm start
 ```
@@ -110,6 +122,17 @@ if (aar) {
 ```
 
 Since this custom resolver redirects all `/static/js`, `/static/img`, `/static/css` this is also somewhat of a red flag, as you may have multiple services that want you to redirect those specific paths, and if they are not unique, how can you distinguish between them.
+
+### Sub-domains
+
+Using sub-path for redirecting the websocket  doesn't work because the websocket doesn't use the sub-path by default. For example: if in the web-application the rest url is set to the reverse proxy 'http://<proxy>/<app_api>' the websocket uses url 'http://<proxy>/socket.io' to connect to server (the '<app_api>' part is used to redirect). It is ambiguous for the reserve proxy where to redirect the websocket (if there are multiple application that use websockets). A sub-domain fixes this problem and prevents fixing all web application. A disadvantage is that each application must have it own sub-domain.
+
+The following aplications have subdomain:
+
+| Application            | Sub-domain          |
+| ---------------------- | ------------------- |
+| Copper                 | copper_api          |
+| Kafka replayer service | replayerservice_api |
 
 ### Home page
 
