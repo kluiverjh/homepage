@@ -11,13 +11,13 @@
     "build": "parcel build index.html --out-dir ./public",
     "dev": "parcel index.html --out-dir ./public",
     "build:domain": "npm run clean && npm run build",
-		"docker:build": "docker build -t homepage .",
-		"docker:tag": "docker tag homepage drivereu/homepage",
-		"docker:publish": "docker push drivereu/homepage",
-		"docker": "npm run docker:local && npm run docker:publish",
-		"docker:local": "npm run docker:build && npm run docker:tag",
-		"docker:run": "docker run --name home -it -p 80:80 homepage",
-		"docker:sh": "docker run -it homepage sh"
+    "docker:build": "docker build -t homepage .",
+    "docker:tag": "docker tag homepage drivereu/homepage",
+    "docker:publish": "docker push drivereu/homepage",
+    "docker": "npm run docker:local && npm run docker:publish",
+    "docker:local": "npm run docker:build && npm run docker:tag",
+    "docker:run": "docker run --name home -it -p 80:80 homepage",
+    "docker:sh": "docker run -it homepage sh"
   },
   "repository": {
     "type": "git",
