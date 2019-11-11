@@ -24,8 +24,16 @@ const replayservice_api = process.env.replayservice_api; // || 'localhost:8209';
 const useSsl = process.env.ssl || false;
 
 
+const replayservice_subdomain = 'replayservice';
+const replayservice_subdomain_full = `${replayservice_subdomain}.${hostname}`.toLocaleLowerCase();
+
+const replayservice_api_subdomain = 'replayservice_api';
+const replayservice_api_subdomain_full = `${replayservice_api_subdomain}.${hostname}`.toLocaleLowerCase();
+
+
 // Title on the home page
 const title = process.env.title || 'Test-bed';
+// Not used anymore?
 // Let's encrypt certificates
 const email = process.env.email || 'erik.vullings@tno.nl';
 const ssl = useSsl
@@ -46,6 +54,8 @@ const app = new Koa();
 app.use(serve(path.resolve('./public'))); // This is the homepage website (created with npm run build)
 app.use(cors());
 app.use(async function (ctx, next) {
+  // Redirect /replayservice/ to http://replayservice.<domain>
+  if (ctx.path === `/replayservice/`) ctx.redirect('http://' +  replayservice_subdomain_full) ;
   // The homepage GUI needs to get the current configuration
   if (ctx.method !== 'GET' || ctx.path !== '/services') return await next();
   ctx.type = 'json';
@@ -60,7 +70,7 @@ app.use(async function (ctx, next) {
     debugServices: {
       topics,
       schemas,
-	  replayerservice
+	  replayservice
     },
     otherServices: {
       time,
@@ -157,20 +167,6 @@ if (copper) {
   resolvers.push(resolver);
 } else console.log(`No proxy for copper configured.`);
 
-
-if (replayservice) {
-  console.log(`Map '${hostname}/replayservice/*' --> '${replayservice}'`);
-  const resolver = function (host, url, req) {
-    const replayservice_regex = /^\/replayservice\//; // Check for /replayservice/ in url
-    if (replayservice_regex.test(url) || sockjs_regex.test(url)) {
-      req.url = url.replace(/^\/replayservice/, '');
-      return { url: `${copper}/` };
-    }
-  };
-  resolver.priority = 100;
-  resolvers.push(resolver);
-} else console.log(`No proxy for replayservice configured.`);
-
 const proxy = require('redbird')(
   useSsl
     ? {
@@ -204,9 +200,13 @@ if (copper) {
   proxy.register(`${copper_api_subdomain_full}`, `${copper_api}`);
 }
 
-const replayservice_api_subdomain = 'replayservice_api';
-const replayservice_api_subdomain_full = `${replayservice_api_subdomain}.${hostname}`.toLocaleLowerCase();
+
 if (replayservice) {
+   // All url's in web app are relative, use subdomain to prevent resolve all url's (e.g. app.*.js can be used by multiple applications)
+   // Examples: app.<id>.css, chunk-vendors.<id>.css, app.<id>.js
+   // Create subdomain for web-site and subdomain for rest calls (use different ports)
+  console.log(`Map '${replayservice_subdomain_full}/*' --> '${replayservice}'`);
+  proxy.register(`${replayservice_subdomain_full}`, `${replayservice}`);
   console.log(`Map '${replayservice_api_subdomain_full}/*' --> '${replayservice_api}'`);
   proxy.register(`${replayservice_api_subdomain_full}`, `${replayservice_api}`);
 }
@@ -223,11 +223,13 @@ if (rest) {
   proxy.register(`${hostname}/rest`, `${rest}`);
 } else console.log(`No proxy for rest configured.`);
 
+// Timeservice uses subpath /time-service' (and websocket with subpath '/time-service/socket.io')
+// Therefore no subdomain is needed (the service is reserve proxy safe)
 if (time) {
-  console.log(`Map '${hostname}/time' --> '${time}'`);
-  console.log(`Map '${hostname}/time-service' --> '${time}'`);
-  proxy.register(`${hostname}/time`, `${time}`);
-  proxy.register(`${hostname}/time-service`, `${time}`);
+  console.log(`Map '${hostname}/time' --> '${time}/time-service'`);
+  console.log(`Map '${hostname}/time-service' --> '${time}/time-service'`);
+  proxy.register(`${hostname}/time`, `${time}/time-service`);
+  proxy.register(`${hostname}/time-service`, `${time}/time-service`);
 } else console.log(`No proxy for time service configured.`);
 
 if (lfs) {
