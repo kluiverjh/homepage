@@ -1,6 +1,6 @@
 {
   "name": "homepage",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A reverse proxy and home page combined, offering easy access to all services.",
   "main": "index.js",
   "scripts": {
