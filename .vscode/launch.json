@@ -1,14 +1,23 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}\\proxy.js"
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}\\proxy.js",
+      "env": {
+        "tmt": "localhost:3210",
+        "rest": "localhost:8082",
+        "topics": "localhost:3600",
+        "schemas": "localhost:3601",
+        "time": "localhost:8100",
+        "lfs": "localhost:9090",
+        "mailapi": "localhost:4200"
+      }
+    }
+  ]
 }

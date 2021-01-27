@@ -18,23 +18,21 @@ npm i
 For the home page to work, it needs to know the location of the Test-bed services. So you need to specify them via the environment by setting:
 
 ```bash
-set tmt='localhost:3210'
-set rest='localhost:8082'
-set topics='localhost:3600'
-set schemas='localhost:3601'
-set admin='localhost:8090'
-set aar='localhost:8095'
-set ost='localhost:8050'
-set time='localhost:8100'
-set lfs='localhost:9090'
-set copper='localhost:8088'
-set copper_api='localhost:3008'
-set replayservice='localhost:8080'
-set replayservice_api='localhost:8209'
-set copper='localhost:8088'
-set copper_api='localhost:3008'
-set replayservice='localhost:8080'
-set replayservice_api='localhost:8209'
+set tmt=localhost:3210
+set rest=localhost:8082
+set topics=localhost:3600
+set schemas=localhost:3601
+set time=localhost:8100
+set lfs=localhost:9090
+set mailapi=localhost:4200
+set mail=localhost:3080
+# set admin=localhost:8090
+# set aar=localhost:8095
+# set ost=localhost:8050
+# set copper=localhost:8088
+# set copper_api=localhost:3008
+# set replayservice=localhost:8080
+# set replayservice_api=localhost:8209
 
 npm run production
 ```
@@ -42,19 +40,21 @@ npm run production
 ## Development
 
 ```bash
-set tmt='localhost:3210'
-set rest='localhost:8082'
-set topics='localhost:3600'
-set schemas='localhost:3601'
-set admin='localhost:8090'
-set aar='localhost:8095'
-set ost='localhost:8050'
-set time='localhost:8100'
-set lfs='localhost:9090'
-set copper='localhost:8088'
-set copper_api='localhost:3008'
-set replayservice='localhost:8080'
-set replayservice_api='localhost:8209'
+set tmt=localhost:3210
+set rest=localhost:8082
+set topics=localhost:3600
+set schemas=localhost:3601
+set admin=localhost:8090
+set aar=localhost:8095
+set ost=localhost:8050
+set time=localhost:8100
+set lfs=localhost:9090
+set mailapi=localhost:4200
+set mail=localhost:3080
+set copper=localhost:8088
+set copper_api=localhost:3008
+set replayservice=localhost:8080
+set replayservice_api=localhost:8209
 
 npm start
 ```
@@ -63,7 +63,7 @@ npm start
 
 In order to build a new image, run `npm run docker:local`. You can test it using `npm run docker:run` (use another terminal to stop your container) or `npm run docker:sh` to enter it. When you are happy with it, run `npm run docker` to publish it to the Docker hub.
 
-Since the reverse proxy needs to access the services, you need to specify their location. Typically, running outside a  Docker container, you would refer to `localhost:port`. However, inside a Docker container, you refer to a service by its container name, i.e. `container:port`. For example, consider the following.
+Since the reverse proxy needs to access the services, you need to specify their location. Typically, running outside a Docker container, you would refer to localhost:port`. However, inside a Docker container, you refer to aservice by its container name, i.e. `container:port`. For example, consider the following.
 
 ```yaml
   homepage:
@@ -125,7 +125,7 @@ Since this custom resolver redirects all `/static/js`, `/static/img`, `/static/c
 
 ### Sub-domains
 
-Using sub-path for redirecting the websocket  doesn't work because the websocket doesn't use the sub-path by default. For example: if in the web-application the rest url is set to the reverse proxy 'http://<proxy>/<app_api>' the websocket uses url 'http://<proxy>/socket.io' to connect to server (the '<app_api>' part is used to redirect). It is ambiguous for the reserve proxy where to redirect the websocket (if there are multiple application that use websockets). A sub-domain fixes this problem and prevents fixing all web application. A disadvantage is that each application must have it own sub-domain.
+Using sub-path for redirecting the websocket doesn't work because the websocket doesn't use the sub-path by default. For example: if in the web-application the REST url is set to the reverse proxy 'http://<proxy>/<app_api>' the websocket uses url 'http://<proxy>/socket.io' to connect to server (the '<app_api>' part is used to redirect). It is ambiguous for the reserve proxy where to redirect the websocket (if there are multiple application that use websockets). A sub-domain fixes this problem and prevents fixing all web application. A disadvantage is that each application must have it own sub-domain.
 
 The following aplications have subdomain:
 
