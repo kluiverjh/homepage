@@ -34,8 +34,8 @@ export const HomePage = () => ({
       ? [
           m(".row", [
             m(
-              "nav.yellow.darken-3",
-              m(".nav-wrapper", [
+              "nav.grey.lighten-3",
+              m(".nav-wrapper.black-text", [
                 m(
                   "a.brand-logo[href=#]",
                   { style: "margin: 0 10px 0 20px; left: 20px" },
@@ -44,7 +44,7 @@ export const HomePage = () => ({
                   })
                 ),
                 m(
-                  "h3.center.yellow.darken-3.hide-on-small-only",
+                  "h3.center.grey.lighten-3.hide-on-small-only",
                   { style: "margin: 0 auto; padding: 10px 0;" },
                   state && state.title
                     ? `Online ${state.title} services`
@@ -86,7 +86,7 @@ export const HomePage = () => ({
             ),
           ]),
           m(
-            "footer.page-footer.yellow.darken-3",
+            "footer.page-footer.grey.lighten-3",
             {
               style:
                 "height: 100px; padding: 5px 0; position: fixed; left: 0; bottom: 0; width: 100%",
@@ -106,26 +106,35 @@ export const HomePage = () => ({
                 m("div", { style: "float: right; margin-left: 10px;" }, [
                   m("img", {
                     src: strategyLogo,
-                    width: 67,
+                    width: 255,
                     height: 67,
                     style: "display: block; margin-left: 40px;",
                   }),
-                  m(
-                    "a.primary-text",
-                    {
-                      style: "display: block",
-                      href: "https://www.strategy-project.eu",
-                      target: "_blank",
-                    },
-                    "www.strategy-project.eu"
-                  ),
+                  // m(
+                  //   "a.primary-text.right",
+                  //   {
+                  //     style: "display: block",
+                  //     href: "https://www.strategy-project.eu",
+                  //     target: "_blank",
+                  //   },
+                  //   "www.strategy-project.eu"
+                  // ),
                 ]),
                 m(
-                  ".white-text",
+                  ".black-text",
                   `This project has received funding from the European Union’s Horizon 2020 research and innovation
                   programme under grant agreement No 883250`
                 ),
-                m("span", "STRATEGY"),
+                m(
+                  "a.primary-text",
+                  {
+                    style: "display: block",
+                    href: "https://www.strategy-project.eu",
+                    target: "_blank",
+                  },
+                  "www.strategy-project.eu"
+                ),
+                // m("span.black-text", "STRATEGY"),
               ])
             )
           ),

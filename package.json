@@ -16,8 +16,8 @@
     "docker:tag:latest": "docker tag homepage strategyeu/homepage:latest",
     "docker:publish": "docker push strategyeu/homepage:0.1.0",
     "docker:publish:latest": "docker push strategyeu/homepage:latest",
-    "docker": "npm run docker:local && npm run docker:publish",
-    "docker:local": "npm run docker:build && npm run docker:tag",
+    "docker:local": "npm run docker:build && npm run docker:tag && npm run docker:tag:latest",
+    "docker": "npm run docker:local && npm run docker:publish && npm run docker:publish:latest",
     "docker:run": "docker run --name home -it -p 80:80 homepage",
     "docker:sh": "docker run -it homepage sh"
   },

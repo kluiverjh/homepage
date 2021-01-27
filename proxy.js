@@ -75,7 +75,7 @@ const fqdn_simulation_service_api = `${subdomain_simulation_service_api}.${hostn
 const fqdn_simulation_service_websocket = `${subdomain_simulation_service_websocket}.${hostname}`.toLocaleLowerCase();
 
 // Title on the home page
-const title = process.env.title || "Test-bed";
+const title = process.env.title || "Testbed";
 // Not used anymore?
 // Let's encrypt certificates
 const email = process.env.email || "erik.vullings@tno.nl";
