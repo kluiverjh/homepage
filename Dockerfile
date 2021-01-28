@@ -20,9 +20,10 @@ RUN npm run build
 FROM node:alpine
 ENV NODE_ENV=production
 WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install --production
+COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/public ./public
+COPY index.html ./
+COPY favicon.ico ./
 COPY proxy.js ./
 EXPOSE 80
 CMD ["node", "/usr/src/app/proxy.js"]

@@ -69,8 +69,8 @@ Since the reverse proxy needs to access the services, you need to specify their 
   homepage:
     image: drivereu/homepage
     ports:
-      - '80:80'
-      - '443:443'
+      - 80:80
+      - 443:443
     environment:
       title: Test-bed FD
       email: your.email@gmail.com
