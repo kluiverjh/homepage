@@ -230,27 +230,10 @@ if (aar) {
 } else console.log(`No proxy for after action review.`);
 
 if (mailapi) {
-  console.log(
-    `Map external '${hostname}/mailapi/*' --> to internal '${mailapi}/*'`
-  );
-  const resolver = function (host, url, req) {
-    if (
-      /^\/mailapi\//.test(url) ||
-      /^\/styles.css/.test(url) ||
-      /^\/runtime.js/.test(url) ||
-      /^\/polyfills.js/.test(url) ||
-      /^\/vendor.js/.test(url) ||
-      /^\/main.js/.test(url) ||
-      /^\/sockjs-node\//.test(url)
-    ) {
-      req.url = url.replace(/^\/mailapi/, "");
-      console.log(url);
-      return { url: `${mailapi}/` };
-    }
-  };
-  resolver.priority = 100;
-  resolvers.push(resolver);
-} else console.log(`No proxy for mail service configured.`);
+  console.log(`Map external '${hostname}/mailapi/*' --> to internal '${mailapi}/*'`);
+  proxy.register(`${hostname}/mailapi`, `${mailapi}`);
+  
+} else console.log(`No proxy for mail api service configured.`);
 
 const proxy = require("redbird")(
   useSsl
@@ -373,11 +356,7 @@ if (geofencer_webapp) {
 
 if (tmt) {
   console.log(`Map external '${hostname}/tmt/*' --> to internal '${tmt}/*'`);
-  console.log(
-    `Map external '${hostname}/socket.io' --> to internal '${tmt}/socket.io'`
-  );
   proxy.register(`${hostname}/tmt`, `${tmt}`);
-  proxy.register(`${hostname}/socket.io`, `${tmt}/socket.io`);
 } else console.log(`No proxy for trail management tool configured.`);
 
 if (rest) {
